@@ -1,3 +1,5 @@
+changes to use with symfony 3.4
+
 AvalancheImagineBundle
 ======================
 
