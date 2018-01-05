@@ -80,7 +80,7 @@
             <argument type="service" id="imagine.cache.manager" />
             <argument type="service" id="imagine.filter.manager" />
 			<call method="setRequest">
-				<argument type="service" id="request" on-invalid="null" strict="false" />
+				<argument type="service" id="request" on-invalid="null" />
 			</call>
         </service>
 
