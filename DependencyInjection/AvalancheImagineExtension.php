@@ -54,7 +54,7 @@ class AvalancheImagineExtension extends Extension
      * @see Symfony\Component\DependencyInjection\Extension.ExtensionInterface::getAlias()
      * @codeCoverageIgnore
      */
-    function getAlias()
+    function getAlias(): string
     {
         return 'avalanche_imagine';
     }
