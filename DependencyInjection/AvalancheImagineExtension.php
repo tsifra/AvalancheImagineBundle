@@ -13,7 +13,7 @@ class AvalancheImagineExtension extends Extension
     /**
      * @see Symfony\Component\DependencyInjection\Extension.ExtensionInterface::load()
      */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('imagine.xml');
