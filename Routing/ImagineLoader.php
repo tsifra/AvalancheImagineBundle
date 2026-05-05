@@ -18,7 +18,7 @@ class ImagineLoader extends Loader
         $this->filters     = $filters;
     }
 
-    public function supports($resource, $type = null)
+    public function supports($resource, $type = null): bool
     {
         return $type === 'imagine';
     }
