@@ -40,7 +40,7 @@ class ImagineHelper extends Helper
      * (non-PHPdoc)
      * @see Symfony\Component\Templating\Helper.HelperInterface::getName()
      */
-    public function getName()
+    public function getName(): string
     {
         return 'imagine';
     }
