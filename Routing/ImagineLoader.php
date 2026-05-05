@@ -23,7 +23,7 @@ class ImagineLoader extends Loader
         return $type === 'imagine';
     }
 
-    public function load($resource, $type = null)
+    public function load($resource, $type = null): mixed
     {
         $requirements = array('_method' => 'GET', 'filter' => '[A-z0-9_\-]*', 'path' => '.+');
         $defaults     = array('_controller' => 'imagine.controller:filter');
