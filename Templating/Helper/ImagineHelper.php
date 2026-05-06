@@ -3,9 +3,8 @@
 namespace Avalanche\Bundle\ImagineBundle\Templating\Helper;
 
 use Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver;
-use Symfony\Component\Templating\Helper\Helper;
 
-class ImagineHelper extends Helper
+class ImagineHelper
 {
     /**
      * @var Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver
