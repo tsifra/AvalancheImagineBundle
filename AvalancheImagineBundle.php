@@ -11,7 +11,7 @@ class AvalancheImagineBundle extends Bundle
     /**
      * @see Symfony\Component\HttpKernel\Bundle.Bundle::build()
      */
-    public function build(ContainerBuilder $container)
+    public function build(ContainerBuilder $container): void
     {
         parent::build($container);
 
