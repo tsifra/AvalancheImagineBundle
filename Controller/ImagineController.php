@@ -5,6 +5,7 @@ namespace Avalanche\Bundle\ImagineBundle\Controller;
 use Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager;
 use Imagine\Image\ImagineInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Avalanche\Bundle\ImagineBundle\Imagine\CacheManager;
@@ -111,8 +112,8 @@ class ImagineController
 	 *
 	 * @param Request $request
 	 */
-	public function setRequest(Request $request = null)
+	public function setRequest(RequestStack $requestStack = null)
 	{
-		$this->request = $request;
+		$this->request = $requestStack->getCurrentRequest();
 	}
 }
