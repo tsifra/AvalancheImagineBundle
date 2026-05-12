@@ -1,0 +1,134 @@
+parameters:
+    # Configuration defaults
+    imagine.web_root: '%kernel.project_dir%/public'
+    imagine.source_root: '%kernel.project_dir%/public'
+    imagine.cache_prefix: 'media/cache'
+    imagine.filters: []
+
+    # Utility classes
+    imagine.filter.manager.class: 'Avalanche\Bundle\ImagineBundle\Imagine\Filter\FilterManager'
+    imagine.cache.path.resolver.class: 'Avalanche\Bundle\ImagineBundle\Imagine\CachePathResolver'
+    imagine.cache.manager.class: 'Avalanche\Bundle\ImagineBundle\Imagine\CacheManager'
+
+    # Controller class
+    imagine.controller.class: 'Avalanche\Bundle\ImagineBundle\Controller\ImagineController'
+
+    # Route loader class
+    imagine.routing.loader.class: 'Avalanche\Bundle\ImagineBundle\Routing\ImagineLoader'
+
+    # Templating classes
+    imagine.twig.extension.class: 'Avalanche\Bundle\ImagineBundle\Templating\ImagineExtension'
+    imagine.templating.helper.class: 'Avalanche\Bundle\ImagineBundle\Templating\Helper\ImagineHelper'
+
+    # ImagineInterface implementations
+    imagine.gd.class: 'Imagine\Gd\Imagine'
+    imagine.imagick.class: 'Imagine\Imagick\Imagine'
+    imagine.gmagick.class: 'Imagine\Gmagick\Imagine'
+
+    # Filter loaders' classes
+    imagine.filter.loader.thumbnail.class: 'Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader\ThumbnailFilterLoader'
+    imagine.filter.loader.relative_resize.class: 'Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader\RelativeResizeFilterLoader'
+    imagine.filter.loader.resize.class: 'Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader\ResizeFilterLoader'
+    imagine.filter.loader.paste.class: 'Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader\PasteFilterLoader'
+    imagine.filter.loader.chain.class: 'Avalanche\Bundle\ImagineBundle\Imagine\Filter\Loader\ChainFilterLoader'
+
+services:
+    # Utility services
+    imagine.cache.path.resolver:
+        class: '%imagine.cache.path.resolver.class%'
+        arguments:
+            - '%imagine.web_root%'
+            - '@router'
+
+    imagine.cache.manager:
+        class: '%imagine.cache.manager.class%'
+        arguments:
+            - '@imagine.cache.path.resolver'
+            - '@imagine'
+            - '@imagine.filter.manager'
+            - '@filesystem'
+            - '%imagine.web_root%'
+            - '%imagine.source_root%'
+
+    imagine.filter.manager:
+        class: '%imagine.filter.manager.class%'
+        arguments:
+            - '%imagine.filters%'
+
+    # Controller
+    imagine.controller:
+        class: '%imagine.controller.class%'
+        arguments:
+            - '@imagine'
+            - '@imagine.cache.manager'
+            - '@imagine.filter.manager'
+        calls:
+            - [setRequest, ['?@request_stack']]
+
+    # Route Loader
+    imagine.routing.loader:
+        class: '%imagine.routing.loader.class%'
+        arguments:
+            - '%imagine.cache_prefix%'
+            - '%imagine.filters%'
+        tags:
+            - { name: routing.loader }
+
+    # ImagineInterface instances
+    imagine:
+        alias: imagine.gd
+
+    imagine.gd:
+        class: '%imagine.gd.class%'
+
+    imagine.imagick:
+        class: '%imagine.imagick.class%'
+
+    imagine.gmagick:
+        class: '%imagine.gmagick.class%'
+
+    # Templating helpers and extensions
+    imagine.twig.extension:
+        class: '%imagine.twig.extension.class%'
+        public: false
+        arguments:
+            - '@imagine.cache.path.resolver'
+        tags:
+            - { name: twig.extension }
+
+    imagine.templating.helper:
+        class: '%imagine.templating.helper.class%'
+        arguments:
+            - '@imagine.cache.path.resolver'
+        tags:
+            - { name: templating.helper, alias: imagine }
+
+    # Filter loaders
+    imagine.filter.loader.thumbnail:
+        class: '%imagine.filter.loader.thumbnail.class%'
+        tags:
+            - { name: imagine.filter.loader, filter: thumbnail }
+
+    imagine.filter.loader.relative_resize:
+        class: '%imagine.filter.loader.relative_resize.class%'
+        tags:
+            - { name: imagine.filter.loader, filter: relative_resize }
+
+    imagine.filter.loader.resize:
+        class: '%imagine.filter.loader.resize.class%'
+        tags:
+            - { name: imagine.filter.loader, filter: resize }
+
+    imagine.filter.loader.paste:
+        class: '%imagine.filter.loader.paste.class%'
+        arguments:
+            - '@imagine'
+        tags:
+            - { name: imagine.filter.loader, filter: paste }
+
+    imagine.filter.loader.chain:
+        class: '%imagine.filter.loader.chain.class%'
+        arguments:
+            - '@imagine.filter.manager'
+        tags:
+            - { name: imagine.filter.loader, filter: chain }
